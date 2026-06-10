@@ -192,7 +192,7 @@ export default function Home() {
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-10 rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
           <p className="mb-4 text-sm font-semibold text-sky-400">
-            SES案件比較ツール Ver1.0
+            SES案件比較ツール Ver1.1
           </p>
           <h1 className="mb-6 text-4xl font-bold md:text-5xl">
             SES案件チェッカー
@@ -365,6 +365,61 @@ export default function Home() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+          {sortedProjects.length > 0 && (
+            <div className="mt-8 overflow-x-auto">
+              <h3 className="mb-3 text-xl font-bold">横並び比較</h3>
+
+              <table className="w-full min-w-[800px] border-collapse overflow-hidden rounded-2xl text-left">
+                <thead>
+                  <tr className="bg-slate-100">
+                    <th className="border border-slate-200 px-4 py-3">順位</th>
+                    <th className="border border-slate-200 px-4 py-3">案件名</th>
+                    <th className="border border-slate-200 px-4 py-3">点数</th>
+                    <th className="border border-slate-200 px-4 py-3">評価</th>
+                    <th className="border border-slate-200 px-4 py-3">単価</th>
+                    <th className="border border-slate-200 px-4 py-3">リモート</th>
+                    <th className="border border-slate-200 px-4 py-3">言語</th>
+                    <th className="border border-slate-200 px-4 py-3">勤務地</th>
+                    <th className="border border-slate-200 px-4 py-3">工程</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {sortedProjects.map((project, index) => (
+                    <tr key={`${project.name}-table-${index}`} className="bg-white">
+                      <td className="border border-slate-200 px-4 py-3 font-bold">
+                        {index + 1}位
+                      </td>
+                      <td className="border border-slate-200 px-4 py-3 font-bold">
+                        {project.name}
+                      </td>
+                      <td className="border border-slate-200 px-4 py-3 text-xl font-bold text-sky-600">
+                        {project.score}点
+                      </td>
+                      <td className="border border-slate-200 px-4 py-3 font-bold">
+                        {project.rank}
+                      </td>
+                      <td className="border border-slate-200 px-4 py-3">
+                        {project.price}万円
+                      </td>
+                      <td className="border border-slate-200 px-4 py-3">
+                        {project.remote}
+                      </td>
+                      <td className="border border-slate-200 px-4 py-3">
+                        {project.language}
+                      </td>
+                      <td className="border border-slate-200 px-4 py-3">
+                        {project.location}
+                      </td>
+                      <td className="border border-slate-200 px-4 py-3">
+                        {project.process}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </section>
