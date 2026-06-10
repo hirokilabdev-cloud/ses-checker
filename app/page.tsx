@@ -112,7 +112,40 @@ export default function Home() {
           : totalScore >= 60
             ? "条件次第ではありですが、気になる点があります。"
             : "慎重に見た方がよさそうです。希望条件とのギャップがあります。";
+  
+  const summaryComment =
+  totalScore >= 90
+    ? "総合的にかなり相性の良い案件です。\n" + "単価・働き方・スキル面のバランスが良く、優先的に面談候補へ入れてよさそうです。"
+    : totalScore >= 80
+      ? "希望条件との相性が高い案件です。\n" + "細かい条件を確認しながら、前向きに検討できそうです。"
+      : totalScore >= 70
+        ? "悪くない案件です。\n" + "いくつか確認ポイントはありますが、面談で詳細を聞いて判断する価値はありそうです。"
+        : totalScore >= 60
+          ? "条件次第ではありですが、いくつか気になる点があります。\n" + "単価・通勤・リモート頻度など、負担になりやすい条件は事前確認がおすすめです。"
+          : "慎重に見た方がよさそうです。\n" + "希望条件とのギャップが大きい可能性があるため、他案件との比較もおすすめです。";
 
+
+  let recommendedActions: string[] = [];
+
+  if (totalScore >= 80) {
+    recommendedActions = [
+      "面談候補として優先的に検討しましょう。",
+      "参画条件や現場の雰囲気を確認しましょう。",
+      "募集終了前に早めの応募がおすすめです。",
+    ];
+  } else if (totalScore >= 60) {
+    recommendedActions = [
+      "面談で不足条件を確認しましょう。",
+      "他案件とも比較して判断しましょう。",
+      "単価や働き方の交渉余地があるか確認しましょう。",
+    ];
+  } else {
+    recommendedActions = [
+      "他案件も含めて比較検討しましょう。",
+      "希望条件の優先順位を整理しましょう。",
+      "無理に応募せず条件の良い案件を待つ選択肢もあります。",
+    ];
+  }
   return (
     <main className="min-h-screen bg-slate-200 text-slate-900">
       <div className="mx-auto max-w-5xl px-6 py-12">
@@ -200,14 +233,33 @@ export default function Home() {
             <ScoreCard title="工程" score={processScore} />
           </div>
 
-          <p className="mb-6 rounded-xl border border-blue-200 bg-blue-50 px-5 py-4 font-semibold text-blue-800">
-            <span className="mr-2">ⓘ</span>
-            {resultComment}
-          </p>
+          <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 px-5 py-4 text-blue-800">
+          <div className="mb-2 font-bold">
+            ⓘ 総評
+          </div>
+
+            <p className="leading-8 whitespace-pre-line">
+              {summaryComment}
+            </p>
+          </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <PointList title="良い点" points={goodPoints} emptyText="まだ良い点を判定できる入力が足りません。" />
             <PointList title="注意点" points={cautionPoints} emptyText="大きな注意点はまだ見つかっていません。" />
+          </div>
+          <div className="mb-6 grid gap-6 md:grid-cols-2"></div>
+          <div className="rounded-2xl border border-sky-200 bg-sky-50 p-5">
+            <h3 className="mb-3 text-lg font-bold text-sky-900">
+              🚀 おすすめアクション
+            </h3>
+
+            <ul className="space-y-2 text-sky-800">
+              {recommendedActions.map((action, index) => (
+                <li key={index}>
+                  • {action}
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
