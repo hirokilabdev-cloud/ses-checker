@@ -2,6 +2,17 @@
 
 import { useState } from "react";
 
+type SavedProject = {
+  name: string;
+  score: number;
+  rank: string;
+  price: string;
+  remote: string;
+  language: string;
+  location: string;
+  process: string;
+};
+
 export default function Home() {
   const [targetPrice, setTargetPrice] = useState("");
   const [remoteLevel, setRemoteLevel] = useState("週3以上");
@@ -19,6 +30,8 @@ export default function Home() {
   const [projectCommuteTime, setProjectCommuteTime] = useState("");
   const [projectProcess, setProjectProcess] = useState("基本設計〜製造");
   const [projectMemo, setProjectMemo] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [savedProjects, setSavedProjects] = useState<SavedProject[]>([]);
 
   const targetPriceNumber = Number(targetPrice);
   const projectPriceNumber = Number(projectPrice);
@@ -146,12 +159,29 @@ export default function Home() {
       "無理に応募せず条件の良い案件を待つ選択肢もあります。",
     ];
   }
+
+  const handleSaveProject = () => {
+    const newProject: SavedProject = {
+      name: projectName || `案件${savedProjects.length + 1}`,
+      score: totalScore,
+      rank,
+      price: projectPrice || "未入力",
+      remote: projectRemoteLevel,
+      language: projectLanguage,
+      location: projectLocation || "未入力",
+      process: projectProcess,
+    };
+
+    setSavedProjects([...savedProjects, newProject]);
+  };
+
+  const sortedProjects = [...savedProjects].sort((a, b) => b.score - a.score);
   return (
     <main className="min-h-screen bg-slate-200 text-slate-900">
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-10 rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
           <p className="mb-4 text-sm font-semibold text-sky-400">
-            SES案件比較ツール Ver0.8
+            SES案件比較ツール Ver1.0
           </p>
           <h1 className="mb-6 text-4xl font-bold md:text-5xl">
             SES案件チェッカー
@@ -200,8 +230,14 @@ export default function Home() {
           </section>
 
           <section className="space-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
+           
             <h2 className="text-2xl font-bold">案件情報</h2>
-
+            <Input
+                        label="案件名"
+                        value={projectName}
+                        setValue={setProjectName}
+                        placeholder="例：商社向け基幹システム開発"
+                      />
             <Input label="案件単価（万円）" value={projectPrice} setValue={setProjectPrice} placeholder="例：75" />
             <Select label="案件リモート頻度" value={projectRemoteLevel} setValue={setProjectRemoteLevel} options={["フルリモート", "週3以上", "週1〜2", "出社中心"]} />
             <Select label="案件使用言語" value={projectLanguage} setValue={setProjectLanguage} options={["Java", "JavaScript", "TypeScript", "Python", "PHP", "その他"]} />
@@ -261,8 +297,51 @@ export default function Home() {
               ))}
             </ul>
           </div>
+          <button
+            onClick={handleSaveProject}
+            className="mt-6 rounded-xl bg-sky-600 px-6 py-3 font-bold text-white hover:bg-sky-700"
+          >
+            この案件を比較リストに追加
+          </button>
         </section>
+        <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-md">
+          <h2 className="mb-4 text-2xl font-bold">案件比較ランキング</h2>
 
+          {sortedProjects.length === 0 ? (
+            <p className="text-slate-500">
+              まだ案件が追加されていません。診断結果から案件を追加すると、ここにランキング表示されます。
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {sortedProjects.map((project, index) => (
+                <div
+                  key={`${project.name}-${index}`}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-lg font-bold">
+                        {index + 1}位：{project.name}
+                      </p>
+                      <p className="text-sm text-slate-600">
+                        {project.location} / {project.remote} / {project.language} / {project.process}
+                      </p>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-3xl font-bold text-sky-600">
+                        {project.score}点
+                      </p>
+                      <p className="font-bold text-slate-700">
+                        評価：{project.rank}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
         <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
           <label className="mb-2 block font-semibold">案件メモ</label>
           <textarea
