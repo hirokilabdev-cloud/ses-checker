@@ -62,19 +62,46 @@ export default function Home() {
       : 0;
 
   const totalScore = priceScore + remoteScore + languageScore + commuteScore;
+  let rank = "D";
+
+  if (totalScore >= 90) {
+    rank = "S";
+  } else if (totalScore >= 80) {
+    rank = "A";
+  } else if (totalScore >= 70) {
+    rank = "B";
+  } else if (totalScore >= 60) {
+    rank = "C";
+  }
+
+  let stars = "★☆☆☆☆";
+
+  if (totalScore >= 90) {
+    stars = "★★★★★";
+  } else if (totalScore >= 80) {
+    stars = "★★★★☆";
+  } else if (totalScore >= 70) {
+    stars = "★★★☆☆";
+  } else if (totalScore >= 60) {
+    stars = "★★☆☆☆";
+  }
 
   const resultComment =
-    totalScore >= 80
-      ? "かなり相性の良い案件です。条件面・スキル面ともに前向きに検討できそうです。"
-      : totalScore >= 60
-        ? "条件次第でありな案件です。リモート頻度・残業・通勤負担は面談前に確認すると安心です。"
-        : "現時点では慎重に見た方がよさそうです。単価・通勤・リモート条件のどこかに負担がありそうです。";
+  totalScore >= 90
+    ? "かなり理想に近い案件です。優先的に面談候補へ入れてよさそうです。"
+    : totalScore >= 80
+      ? "希望条件との相性が高い案件です。前向きに検討できそうです。"
+      : totalScore >= 70
+        ? "悪くない案件です。詳細条件を確認して判断しましょう。"
+        : totalScore >= 60
+          ? "条件次第ではありですが、気になる点があります。"
+          : "慎重に見た方がよさそうです。希望条件とのギャップがあります。";
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <div className="mx-auto max-w-4xl px-6 py-12">
         <p className="mb-4 text-sm font-semibold text-sky-400">
-          SES案件比較ツール Ver0.4
+          SES案件比較ツール Ver0.5
         </p>
 
         <h1 className="mb-6 text-4xl font-bold">SES案件チェッカー</h1>
@@ -88,10 +115,10 @@ export default function Home() {
             <h2 className="text-2xl font-bold">希望条件</h2>
 
             <div>
-              <label className="mb-2 block font-semibold">希望単価</label>
+              <label className="mb-2 block font-semibold">希望単価（万円）</label>
               <input
                 className="w-full rounded-lg bg-slate-800 p-3 text-white"
-                placeholder="例：700000"
+                placeholder="例：70"
                 value={targetPrice}
                 onChange={(e) => setTargetPrice(e.target.value)}
               />
@@ -164,10 +191,10 @@ export default function Home() {
             <h2 className="text-2xl font-bold">案件情報</h2>
 
             <div>
-              <label className="mb-2 block font-semibold">案件単価</label>
+              <label className="mb-2 block font-semibold">案件単価（万円）</label>
               <input
                 className="w-full rounded-lg bg-slate-800 p-3 text-white"
-                placeholder="例：750000"
+                placeholder="例：75"
                 value={projectPrice}
                 onChange={(e) => setProjectPrice(e.target.value)}
               />
@@ -245,6 +272,18 @@ export default function Home() {
 
         <section className="mt-6 rounded-2xl border border-slate-700 bg-slate-900 p-6">
           <h2 className="mb-4 text-2xl font-bold">おすすめ度</h2>
+          <div className="mb-4">
+            <p className="text-2xl text-yellow-400">
+              {stars}
+            </p>
+
+            <p className="mt-2 text-lg text-slate-300">
+              総合評価：
+              <span className="ml-2 text-3xl font-bold text-sky-400">
+                {rank}
+              </span>
+            </p>
+          </div>
 
           <div className="mb-4 text-5xl font-bold text-sky-400">
             {totalScore}点
