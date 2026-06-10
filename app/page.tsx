@@ -176,6 +176,17 @@ export default function Home() {
   };
 
   const sortedProjects = [...savedProjects].sort((a, b) => b.score - a.score);
+
+  const handleDeleteProject = (targetIndex: number) => {
+    setSavedProjects(
+      savedProjects.filter((_, index) => index !== targetIndex)
+    );
+  };
+
+  const handleClearProjects = () => {
+    setSavedProjects([]);
+  };
+
   return (
     <main className="min-h-screen bg-slate-200 text-slate-900">
       <div className="mx-auto max-w-5xl px-6 py-12">
@@ -313,6 +324,14 @@ export default function Home() {
             </p>
           ) : (
             <div className="space-y-4">
+              <div className="mb-4 flex justify-end">
+                <button
+                  onClick={handleClearProjects}
+                  className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-100"
+                >
+                  比較リストをクリア
+                </button>
+              </div>
               {sortedProjects.map((project, index) => (
                 <div
                   key={`${project.name}-${index}`}
@@ -329,12 +348,19 @@ export default function Home() {
                     </div>
 
                     <div className="text-right">
+                      <button
+                        onClick={() => handleDeleteProject(savedProjects.indexOf(project))}
+                        className="mt-2 rounded-lg border border-red-200 px-3 py-1 text-sm font-bold text-red-600 hover:bg-red-50"
+                      >
+                        削除
+                      </button>
                       <p className="text-3xl font-bold text-sky-600">
                         {project.score}点
                       </p>
                       <p className="font-bold text-slate-700">
                         評価：{project.rank}
                       </p>
+                      
                     </div>
                   </div>
                 </div>
