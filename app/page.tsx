@@ -6,26 +6,81 @@ export default function Home() {
   const [targetPrice, setTargetPrice] = useState("");
   const [remoteLevel, setRemoteLevel] = useState("週3以上");
   const [commuteTime, setCommuteTime] = useState("");
+  const [homeArea, setHomeArea] = useState("豊川");
+  const [preferredLocation, setPreferredLocation] = useState("名古屋駅");
   const [language, setLanguage] = useState("Java");
 
   const [projectPrice, setProjectPrice] = useState("");
   const [projectRemoteLevel, setProjectRemoteLevel] = useState("週3以上");
   const [projectLanguage, setProjectLanguage] = useState("Java");
   const [projectLocation, setProjectLocation] = useState("");
+  const [projectCommuteTime, setProjectCommuteTime] = useState("");
   const [projectProcess, setProjectProcess] = useState("基本設計〜製造");
   const [projectMemo, setProjectMemo] = useState("");
+
+  const targetPriceNumber = Number(targetPrice);
+  const projectPriceNumber = Number(projectPrice);
+  const commuteTimeNumber = Number(commuteTime);
+  const projectCommuteTimeNumber = Number(projectCommuteTime);
+
+  const priceScore =
+    targetPriceNumber > 0 && projectPriceNumber > 0
+      ? projectPriceNumber >= targetPriceNumber
+        ? 25
+        : projectPriceNumber >= targetPriceNumber * 0.9
+          ? 20
+          : projectPriceNumber >= targetPriceNumber * 0.8
+            ? 15
+            : 8
+      : 0;
+
+  const remoteRank: Record<string, number> = {
+    フルリモート: 4,
+    週3以上: 3,
+    "週1〜2": 2,
+    出社中心: 1,
+  };
+
+  const remoteScore =
+    remoteRank[projectRemoteLevel] >= remoteRank[remoteLevel]
+      ? 25
+      : remoteRank[projectRemoteLevel] === remoteRank[remoteLevel] - 1
+        ? 18
+        : remoteRank[projectRemoteLevel] === remoteRank[remoteLevel] - 2
+          ? 10
+          : 5;
+
+  const languageScore = language === projectLanguage ? 25 : 10;
+
+  const commuteScore =
+    commuteTimeNumber > 0 && projectCommuteTimeNumber > 0
+      ? projectCommuteTimeNumber <= commuteTimeNumber
+        ? 25
+        : projectCommuteTimeNumber <= commuteTimeNumber + 20
+          ? 15
+          : 5
+      : 0;
+
+  const totalScore = priceScore + remoteScore + languageScore + commuteScore;
+
+  const resultComment =
+    totalScore >= 80
+      ? "かなり相性の良い案件です。条件面・スキル面ともに前向きに検討できそうです。"
+      : totalScore >= 60
+        ? "条件次第でありな案件です。リモート頻度・残業・通勤負担は面談前に確認すると安心です。"
+        : "現時点では慎重に見た方がよさそうです。単価・通勤・リモート条件のどこかに負担がありそうです。";
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <div className="mx-auto max-w-4xl px-6 py-12">
         <p className="mb-4 text-sm font-semibold text-sky-400">
-          SES案件比較ツール Ver0.3
+          SES案件比較ツール Ver0.4
         </p>
 
         <h1 className="mb-6 text-4xl font-bold">SES案件チェッカー</h1>
 
         <p className="mb-8 text-slate-300">
-          希望条件と案件情報を入力して、案件比較の土台を作ります。
+          希望条件と案件情報を入力して、案件のおすすめ度をざっくり数値化します。
         </p>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -65,6 +120,26 @@ export default function Home() {
                 placeholder="例：60"
                 value={commuteTime}
                 onChange={(e) => setCommuteTime(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block font-semibold">自宅・最寄りエリア</label>
+              <input
+                className="w-full rounded-lg bg-slate-800 p-3 text-white"
+                placeholder="例：豊川"
+                value={homeArea}
+                onChange={(e) => setHomeArea(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block font-semibold">希望勤務地</label>
+              <input
+                className="w-full rounded-lg bg-slate-800 p-3 text-white"
+                placeholder="例：名古屋駅 / 東三河 / フルリモート"
+                value={preferredLocation}
+                onChange={(e) => setPreferredLocation(e.target.value)}
               />
             </div>
 
@@ -139,6 +214,18 @@ export default function Home() {
             </div>
 
             <div>
+              <label className="mb-2 block font-semibold">
+                想定通勤時間（片道・分）
+              </label>
+              <input
+                className="w-full rounded-lg bg-slate-800 p-3 text-white"
+                placeholder="例：75"
+                value={projectCommuteTime}
+                onChange={(e) => setProjectCommuteTime(e.target.value)}
+              />
+            </div>
+
+            <div>
               <label className="mb-2 block font-semibold">工程</label>
               <select
                 className="w-full rounded-lg bg-slate-800 p-3 text-white"
@@ -157,6 +244,38 @@ export default function Home() {
         </div>
 
         <section className="mt-6 rounded-2xl border border-slate-700 bg-slate-900 p-6">
+          <h2 className="mb-4 text-2xl font-bold">おすすめ度</h2>
+
+          <div className="mb-4 text-5xl font-bold text-sky-400">
+            {totalScore}点
+            <span className="ml-2 text-lg text-slate-300">/ 100点</span>
+          </div>
+
+          <div className="mb-4 grid gap-3 md:grid-cols-4">
+            <div className="rounded-xl bg-slate-800 p-4">
+              <p className="text-sm text-slate-400">単価</p>
+              <p className="text-2xl font-bold">{priceScore}/25</p>
+            </div>
+            <div className="rounded-xl bg-slate-800 p-4">
+              <p className="text-sm text-slate-400">リモート</p>
+              <p className="text-2xl font-bold">{remoteScore}/25</p>
+            </div>
+            <div className="rounded-xl bg-slate-800 p-4">
+              <p className="text-sm text-slate-400">言語</p>
+              <p className="text-2xl font-bold">{languageScore}/25</p>
+            </div>
+            <div className="rounded-xl bg-slate-800 p-4">
+              <p className="text-sm text-slate-400">通勤</p>
+              <p className="text-2xl font-bold">{commuteScore}/25</p>
+            </div>
+          </div>
+
+          <p className="rounded-xl bg-slate-800 p-4 text-slate-200">
+            {resultComment}
+          </p>
+        </section>
+
+        <section className="mt-6 rounded-2xl border border-slate-700 bg-slate-900 p-6">
           <h2 className="mb-4 text-2xl font-bold">入力内容プレビュー</h2>
 
           <div className="grid gap-6 md:grid-cols-2">
@@ -165,6 +284,8 @@ export default function Home() {
               <p>希望単価：{targetPrice || "未入力"}</p>
               <p>リモート：{remoteLevel}</p>
               <p>通勤許容：{commuteTime || "未入力"} 分</p>
+              <p>自宅・最寄り：{homeArea || "未入力"}</p>
+              <p>希望勤務地：{preferredLocation || "未入力"}</p>
               <p>希望言語：{language}</p>
             </div>
 
@@ -174,6 +295,7 @@ export default function Home() {
               <p>リモート：{projectRemoteLevel}</p>
               <p>使用言語：{projectLanguage}</p>
               <p>勤務地：{projectLocation || "未入力"}</p>
+              <p>想定通勤：{projectCommuteTime || "未入力"} 分</p>
               <p>工程：{projectProcess}</p>
             </div>
           </div>
