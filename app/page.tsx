@@ -101,22 +101,22 @@ export default function Home() {
             : "慎重に見た方がよさそうです。希望条件とのギャップがあります。";
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-sky-950 text-white">
+    <main className="min-h-screen bg-slate-200 text-slate-900">
       <div className="mx-auto max-w-5xl px-6 py-12">
-        <div className="mb-10 rounded-3xl border border-sky-500/30 bg-slate-900/70 p-8 shadow-2xl shadow-sky-950/40">
+        <div className="mb-10 rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
           <p className="mb-4 text-sm font-semibold text-sky-400">
             SES案件比較ツール Ver0.6
           </p>
           <h1 className="mb-6 text-4xl font-bold md:text-5xl">
             SES案件チェッカー
           </h1>
-          <p className="text-slate-300">
+          <p className="text-slate-600">
             希望条件と案件情報を入力して、案件のおすすめ度をざっくり数値化します。
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          <section className="space-y-5 rounded-2xl border border-slate-700 bg-slate-900/90 p-6">
+          <section className="space-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
             <h2 className="text-2xl font-bold">希望条件</h2>
 
             <Input label="希望単価（万円）" value={targetPrice} setValue={setTargetPrice} placeholder="例：80" />
@@ -127,7 +127,7 @@ export default function Home() {
             <Select label="希望言語" value={language} setValue={setLanguage} options={["Java", "JavaScript", "TypeScript", "Python", "PHP", "その他"]} />
           </section>
 
-          <section className="space-y-5 rounded-2xl border border-slate-700 bg-slate-900/90 p-6">
+          <section className="space-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
             <h2 className="text-2xl font-bold">案件情報</h2>
 
             <Input label="案件単価（万円）" value={projectPrice} setValue={setProjectPrice} placeholder="例：75" />
@@ -139,7 +139,7 @@ export default function Home() {
           </section>
         </div>
 
-        <section className="mt-6 rounded-3xl border border-sky-500/30 bg-slate-900/90 p-6 shadow-xl shadow-sky-950/30">
+        <section className="mt-6 rounded-3xl border border-sky-200 bg-slate-50 p-6 shadow-md">
           <h2 className="mb-4 text-2xl font-bold">診断結果</h2>
 
           <p className="text-3xl text-yellow-400">{stars}</p>
@@ -160,7 +160,8 @@ export default function Home() {
             <ScoreCard title="通勤" score={commuteScore} />
           </div>
 
-          <p className="mb-6 rounded-xl bg-slate-800 p-4 text-slate-200">
+          <p className="mb-6 rounded-xl border border-blue-200 bg-blue-50 px-5 py-4 font-semibold text-blue-800">
+            <span className="mr-2">ⓘ</span>
             {resultComment}
           </p>
 
@@ -170,10 +171,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mt-6 rounded-2xl border border-slate-700 bg-slate-900/90 p-6">
+        <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
           <label className="mb-2 block font-semibold">案件メモ</label>
           <textarea
-            className="min-h-32 w-full rounded-lg bg-slate-800 p-3 text-white"
+            className="min-h-32 w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-slate-900"
             placeholder="案件文をコピペしておくメモ欄。今後AI解析やスキル抽出に使う想定。"
             value={projectMemo}
             onChange={(e) => setProjectMemo(e.target.value)}
@@ -199,7 +200,7 @@ function Input({
     <div>
       <label className="mb-2 block font-semibold">{label}</label>
       <input
-        className="w-full rounded-lg bg-slate-800 p-3 text-white outline-none ring-sky-500 focus:ring-2"
+        className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none ring-sky-500 focus:ring-2"
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -223,7 +224,7 @@ function Select({
     <div>
       <label className="mb-2 block font-semibold">{label}</label>
       <select
-        className="w-full rounded-lg bg-slate-800 p-3 text-white outline-none ring-sky-500 focus:ring-2"
+        className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-slate-900 outline-none ring-sky-500 focus:ring-2"
         value={value}
         onChange={(e) => setValue(e.target.value)}
       >
@@ -237,9 +238,9 @@ function Select({
 
 function ScoreCard({ title, score }: { title: string; score: number }) {
   return (
-    <div className="rounded-xl bg-slate-800 p-4">
-      <p className="text-sm text-slate-400">{title}</p>
-      <p className="text-2xl font-bold">{score}/25</p>
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+  <p className="text-sm text-slate-500">{title}</p>
+      <p className="text-2xl font-bold text-slate-900">{score}/25</p>
     </div>
   );
 }
@@ -253,17 +254,43 @@ function PointList({
   points: string[];
   emptyText: string;
 }) {
+  const isGood = title === "良い点";
+
   return (
-    <div className="rounded-xl bg-slate-800 p-4">
-      <p className="mb-2 font-bold">{title}</p>
+    <div
+      className={
+        isGood
+          ? "rounded-xl border border-emerald-200 bg-emerald-50 p-4"
+          : "rounded-xl border border-orange-200 bg-orange-50 p-4"
+      }
+    >
+      <p
+        className={
+          isGood
+            ? "mb-3 font-bold text-emerald-800"
+            : "mb-3 font-bold text-orange-800"
+        }
+      >
+        <span className="mr-2">{isGood ? "✓" : "⚠"}</span>
+        {title}
+      </p>
+
       {points.length > 0 ? (
-        <ul className="list-disc space-y-1 pl-5 text-slate-200">
+        <ul
+          className={
+            isGood
+              ? "list-disc space-y-2 pl-5 text-emerald-900"
+              : "list-disc space-y-2 pl-5 text-orange-900"
+          }
+        >
           {points.map((point) => (
             <li key={point}>{point}</li>
           ))}
         </ul>
       ) : (
-        <p className="text-slate-400">{emptyText}</p>
+        <p className={isGood ? "text-emerald-700" : "text-orange-700"}>
+          {emptyText}
+        </p>
       )}
     </div>
   );
