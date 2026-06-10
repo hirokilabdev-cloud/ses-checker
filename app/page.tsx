@@ -9,6 +9,8 @@ export default function Home() {
   const [homeArea, setHomeArea] = useState("豊川");
   const [preferredLocation, setPreferredLocation] = useState("名古屋駅");
   const [language, setLanguage] = useState("Java");
+  const [preferredProcess, setPreferredProcess] = useState("基本設計〜製造");
+  const [avoidProcess, setAvoidProcess] = useState("テスト中心");
 
   const [projectPrice, setProjectPrice] = useState("");
   const [projectRemoteLevel, setProjectRemoteLevel] = useState("週3以上");
@@ -24,15 +26,15 @@ export default function Home() {
   const projectCommuteTimeNumber = Number(projectCommuteTime);
 
   const priceScore =
-    targetPriceNumber > 0 && projectPriceNumber > 0
-      ? projectPriceNumber >= targetPriceNumber
-        ? 25
-        : projectPriceNumber >= targetPriceNumber * 0.9
-          ? 20
-          : projectPriceNumber >= targetPriceNumber * 0.8
-            ? 15
-            : 8
-      : 0;
+  targetPriceNumber > 0 && projectPriceNumber > 0
+    ? projectPriceNumber >= targetPriceNumber
+      ? 20
+      : projectPriceNumber >= targetPriceNumber * 0.9
+        ? 16
+        : projectPriceNumber >= targetPriceNumber * 0.8
+          ? 12
+          : 6
+    : 0;
 
   const remoteRank: Record<string, number> = {
     フルリモート: 4,
@@ -42,26 +44,34 @@ export default function Home() {
   };
 
   const remoteScore =
-    remoteRank[projectRemoteLevel] >= remoteRank[remoteLevel]
-      ? 25
-      : remoteRank[projectRemoteLevel] === remoteRank[remoteLevel] - 1
-        ? 18
-        : remoteRank[projectRemoteLevel] === remoteRank[remoteLevel] - 2
-          ? 10
-          : 5;
+  remoteRank[projectRemoteLevel] >= remoteRank[remoteLevel]
+    ? 20
+    : remoteRank[projectRemoteLevel] === remoteRank[remoteLevel] - 1
+      ? 14
+      : remoteRank[projectRemoteLevel] === remoteRank[remoteLevel] - 2
+        ? 8
+        : 4;
 
-  const languageScore = language === projectLanguage ? 25 : 10;
+  const languageScore = language === projectLanguage ? 20 : 8;
 
   const commuteScore =
-    commuteTimeNumber > 0 && projectCommuteTimeNumber > 0
-      ? projectCommuteTimeNumber <= commuteTimeNumber
-        ? 25
-        : projectCommuteTimeNumber <= commuteTimeNumber + 20
-          ? 15
-          : 5
-      : 0;
+  commuteTimeNumber > 0 && projectCommuteTimeNumber > 0
+    ? projectCommuteTimeNumber <= commuteTimeNumber
+      ? 20
+      : projectCommuteTimeNumber <= commuteTimeNumber + 20
+        ? 12
+        : 4
+    : 0;
 
-  const totalScore = priceScore + remoteScore + languageScore + commuteScore;
+  const processScore =
+  projectProcess === avoidProcess
+    ? 3
+    : projectProcess === preferredProcess
+      ? 20
+      : 12;
+
+  const totalScore =
+  priceScore + remoteScore + languageScore + commuteScore + processScore;
 
   let rank = "D";
   if (totalScore >= 90) rank = "S";
@@ -78,15 +88,18 @@ export default function Home() {
   const goodPoints = [
     priceScore >= 20 ? "単価が希望条件に近い、または希望以上です。" : "",
     remoteScore >= 20 ? "リモート条件が希望にかなり近いです。" : "",
-    languageScore === 25 ? "希望言語と案件言語が一致しています。" : "",
+    languageScore === 20 ? "希望言語と案件言語が一致しています。" : "",
     commuteScore >= 20 ? "通勤負担は許容範囲に収まりそうです。" : "",
+    processScore >= 16 ? "案件工程が希望工程に近いです。" : "",
   ].filter(Boolean);
 
   const cautionPoints = [
     priceScore < 20 ? "単価が希望より低い可能性があります。" : "",
     remoteScore < 20 ? "リモート頻度は希望より少ない可能性があります。" : "",
-    languageScore < 25 ? "希望言語と案件言語が一致していません。" : "",
+    languageScore < 20 ? "希望言語と案件言語が一致していません。" : "",
     commuteScore < 20 ? "通勤時間が負担になる可能性があります。" : "",
+    projectProcess === avoidProcess ? "避けたい工程に該当している可能性があります。" : "",
+    processScore < 12 ? "工程面で希望とのズレがありそうです。" : "",
   ].filter(Boolean);
 
   const resultComment =
@@ -105,7 +118,7 @@ export default function Home() {
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-10 rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
           <p className="mb-4 text-sm font-semibold text-sky-400">
-            SES案件比較ツール Ver0.6
+            SES案件比較ツール Ver0.8
           </p>
           <h1 className="mb-6 text-4xl font-bold md:text-5xl">
             SES案件チェッカー
@@ -125,6 +138,32 @@ export default function Home() {
             <Input label="自宅・最寄りエリア" value={homeArea} setValue={setHomeArea} placeholder="例：豊川" />
             <Input label="希望勤務地" value={preferredLocation} setValue={setPreferredLocation} placeholder="例：名古屋駅 / 東三河" />
             <Select label="希望言語" value={language} setValue={setLanguage} options={["Java", "JavaScript", "TypeScript", "Python", "PHP", "その他"]} />
+            <Select
+              label="やりたい工程"
+              value={preferredProcess}
+              setValue={setPreferredProcess}
+              options={[
+                "要件定義〜基本設計",
+                "基本設計〜製造",
+                "製造〜単体テスト",
+                "テスト中心",
+                "保守・運用",
+                "PMO・調整中心",
+              ]}
+            />
+            <Select
+              label="避けたい工程"
+              value={avoidProcess}
+              setValue={setAvoidProcess}
+              options={[
+                "要件定義〜基本設計",
+                "基本設計〜製造",
+                "製造〜単体テスト",
+                "テスト中心",
+                "保守・運用",
+                "PMO・調整中心",
+              ]}
+            />
           </section>
 
           <section className="space-y-5 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
@@ -158,6 +197,7 @@ export default function Home() {
             <ScoreCard title="リモート" score={remoteScore} />
             <ScoreCard title="言語" score={languageScore} />
             <ScoreCard title="通勤" score={commuteScore} />
+            <ScoreCard title="工程" score={processScore} />
           </div>
 
           <p className="mb-6 rounded-xl border border-blue-200 bg-blue-50 px-5 py-4 font-semibold text-blue-800">
@@ -237,10 +277,32 @@ function Select({
 }
 
 function ScoreCard({ title, score }: { title: string; score: number }) {
+  const percentage = Math.round((score / 20) * 100);
+
+  let barColor = "bg-red-400";
+  if (percentage >= 80) {
+    barColor = "bg-emerald-500";
+  } else if (percentage >= 60) {
+    barColor = "bg-sky-500";
+  } else if (percentage >= 40) {
+    barColor = "bg-amber-400";
+  }
+
   return (
     <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-  <p className="text-sm text-slate-500">{title}</p>
-      <p className="text-2xl font-bold text-slate-900">{score}/25</p>
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-sm font-semibold text-slate-600">{title}</p>
+        <p className="text-sm font-bold text-slate-900">{score}/20</p>
+      </div>
+
+      <div className="h-3 overflow-hidden rounded-full bg-slate-200">
+        <div
+          className={`h-full rounded-full ${barColor}`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+
+      <p className="mt-2 text-xs text-slate-500">{percentage}%</p>
     </div>
   );
 }
