@@ -177,6 +177,11 @@ export default function Home() {
 
   const sortedProjects = [...savedProjects].sort((a, b) => b.score - a.score);
 
+  const maxScore = Math.max(...sortedProjects.map((project) => project.score));
+  const maxPrice = Math.max(
+    ...sortedProjects.map((project) => Number(project.price) || 0)
+  );
+
   const handleDeleteProject = (targetIndex: number) => {
     setSavedProjects(
       savedProjects.filter((_, index) => index !== targetIndex)
@@ -192,7 +197,7 @@ export default function Home() {
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-10 rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
           <p className="mb-4 text-sm font-semibold text-sky-400">
-            SES案件比較ツール Ver1.1
+            SES案件比較ツール Ver1.4
           </p>
           <h1 className="mb-6 text-4xl font-bold md:text-5xl">
             SES案件チェッカー
@@ -332,39 +337,46 @@ export default function Home() {
                   比較リストをクリア
                 </button>
               </div>
-              {sortedProjects.map((project, index) => (
-                <div
-                  key={`${project.name}-${index}`}
-                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <p className="text-lg font-bold">
-                        {index + 1}位：{project.name}
-                      </p>
-                      <p className="text-sm text-slate-600">
-                        {project.location} / {project.remote} / {project.language} / {project.process}
-                      </p>
-                    </div>
+              {sortedProjects.map((project, index) => {
+                const medals = ["🥇", "🥈", "🥉"];
+                const medal = medals[index] ?? "🏅";
 
-                    <div className="text-right">
-                      <button
-                        onClick={() => handleDeleteProject(savedProjects.indexOf(project))}
-                        className="mt-2 rounded-lg border border-red-200 px-3 py-1 text-sm font-bold text-red-600 hover:bg-red-50"
-                      >
-                        削除
-                      </button>
-                      <p className="text-3xl font-bold text-sky-600">
-                        {project.score}点
-                      </p>
-                      <p className="font-bold text-slate-700">
-                        評価：{project.rank}
-                      </p>
-                      
+                return (
+                  <div
+                    key={`${project.name}-${index}`}
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-lg font-bold">
+                          <span className="mr-2 text-2xl">{medal}</span>
+                          {index + 1}位：{project.name}
+                        </p>
+
+                        <p className="mt-1 text-sm text-slate-600">
+                          {project.location} / {project.remote} / {project.language} / {project.process}
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <p className="text-3xl font-bold text-sky-600">
+                          {project.score}点
+                        </p>
+                        <p className="font-bold text-slate-700">
+                          評価：{project.rank}
+                        </p>
+
+                        <button
+                          onClick={() => handleDeleteProject(savedProjects.indexOf(project))}
+                          className="mt-2 rounded-lg border border-red-200 px-3 py-1 text-sm font-bold text-red-600 hover:bg-red-50"
+                        >
+                          削除
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
           {sortedProjects.length > 0 && (
@@ -395,17 +407,33 @@ export default function Home() {
                       <td className="border border-slate-200 px-4 py-3 font-bold">
                         {project.name}
                       </td>
-                      <td className="border border-slate-200 px-4 py-3 text-xl font-bold text-sky-600">
+                      <td
+                        className={
+                          project.score === maxScore
+                            ? "border border-slate-200 bg-emerald-50 px-4 py-3 text-xl font-bold text-emerald-700"
+                            : "border border-slate-200 px-4 py-3 text-xl font-bold text-sky-600"
+                        }
+                      >
                         {project.score}点
                       </td>
-                      <td className="border border-slate-200 px-4 py-3 font-bold">
-                        {project.rank}
-                      </td>
                       <td className="border border-slate-200 px-4 py-3">
+                        <span className="rounded-full bg-slate-100 px-3 py-1 font-bold text-slate-700">
+                          {project.rank}
+                        </span>
+                      </td>
+                      <td
+                        className={
+                          Number(project.price) === maxPrice && maxPrice > 0
+                            ? "border border-slate-200 bg-emerald-50 px-4 py-3 font-bold text-emerald-700"
+                            : "border border-slate-200 px-4 py-3"
+                        }
+                      >
                         {project.price}万円
                       </td>
                       <td className="border border-slate-200 px-4 py-3">
-                        {project.remote}
+                        <span className="rounded-full bg-sky-50 px-3 py-1 text-sm font-bold text-sky-700">
+                          {project.remote}
+                        </span>
                       </td>
                       <td className="border border-slate-200 px-4 py-3">
                         {project.language}
