@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SES案件チェッカー",
+  title: "SES案件チェッカー | SES案件比較ツール",
   description: "SES案件の単価・リモート・通勤・スキル相性を比較できる無料ツール",
   keywords: [
     "SES",
