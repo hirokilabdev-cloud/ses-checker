@@ -192,6 +192,27 @@ export default function Home() {
     setSavedProjects([]);
   };
 
+  const relatedArticles = [
+    {
+      title: "SES現場のリアル｜客先常駐でよくある7つの悩みと脱出ルート",
+      description:
+        "SESとして働く中で感じやすい悩みや、現場との向き合い方を実体験ベースでまとめています。",
+      url: "https://se-sidebiz.com/ses-issues-escape",
+    },
+    {
+      title: "SESで10年働いてきて、“自分が何をしてきた人なのか”を初めて考えた",
+      description:
+        "SES10年の経験を振り返りながら、自分のキャリアを棚卸しした記事です。",
+      url: "https://se-sidebiz.com/ses-10years-self-understanding",
+    },
+    {
+      title: "未経験文系SESでも人生はちゃんと積み上げられる",
+      description:
+        "文系未経験からSESとして積み上げてきたことを、同じ立場の人向けに書いています。",
+      url: "https://se-sidebiz.com/non-tech-ses-10years",
+    },
+  ];
+
   return (
     <main className="min-h-screen bg-slate-200 text-slate-900">
       <div className="mx-auto max-w-5xl px-6 py-12">
@@ -451,6 +472,40 @@ export default function Home() {
             </div>
           )}
         </section>
+
+        <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold text-slate-900">
+              📚 関連記事
+            </h2>
+            <p className="mt-1 text-sm text-slate-600">
+              案件選びやSESキャリアについて、SES10年の運営者が実体験をもとにまとめています。
+            </p>
+          </div>
+
+          <div className="grid gap-3">
+            {relatedArticles.map((article) => (
+              <a
+                key={article.title}
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-300 hover:bg-blue-50"
+              >
+                <div className="text-sm font-bold text-slate-900">
+                  📖 {article.title}
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  {article.description}
+                </p>
+                <div className="mt-3 text-sm font-semibold text-blue-600">
+                  記事を読む →
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
         <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
           <label className="mb-2 block font-semibold">案件メモ</label>
           <textarea
