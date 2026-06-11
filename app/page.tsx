@@ -218,7 +218,7 @@ export default function Home() {
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-10 rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
           <p className="mb-4 text-sm font-semibold text-sky-400">
-            SES案件比較ツール Ver1.8
+            SES案件比較ツール Ver1.9
           </p>
           <h1 className="mb-6 text-4xl font-bold md:text-5xl">
             SES案件チェッカー
