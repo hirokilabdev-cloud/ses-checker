@@ -218,7 +218,7 @@ export default function Home() {
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="mb-10 rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
           <p className="mb-4 text-sm font-semibold text-sky-400">
-            SES案件比較ツール Ver1.5
+            SES案件比較ツール Ver1.8
           </p>
           <h1 className="mb-6 text-4xl font-bold md:text-5xl">
             SES案件チェッカー
@@ -525,7 +525,7 @@ export default function Home() {
 
 <section className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50 p-5 shadow-sm">
     <h2 className="text-lg font-bold text-slate-900">
-      💼 もっと条件の良い案件を探したい方へ
+      💡 他の案件も比較してみたい方へ
     </h2>
 
     <p className="mt-3 text-sm leading-relaxed text-slate-700">
