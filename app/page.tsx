@@ -506,6 +506,57 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-5 shadow-sm">
+  <h2 className="text-lg font-bold text-slate-900">
+    👨‍💻 運営者より
+  </h2>
+
+  <p className="mt-3 text-sm leading-relaxed text-slate-700">
+    私はSESエンジニアとして10年以上働いてきました。
+    案件選びで迷った経験もありますし、
+    「この案件は自分に合っていたな」と感じた経験もあります。
+  </p>
+
+  <p className="mt-3 text-sm leading-relaxed text-slate-700">
+    このツールは、案件を選ぶときの判断材料を少しでも増やせたらと思い作りました。
+    ひとつの案件だけで判断せず、複数の案件を比較してみることも大切だと思っています。
+  </p>
+</section>
+
+<section className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50 p-5 shadow-sm">
+    <h2 className="text-lg font-bold text-slate-900">
+      💼 もっと条件の良い案件を探したい方へ
+    </h2>
+
+    <p className="mt-3 text-sm leading-relaxed text-slate-700">
+      今の案件に少しでも迷いがある場合は、
+      リモート可否・単価・通勤時間・担当工程などを含めて、
+      他の案件と比較してみるのもおすすめです。
+    </p>
+
+    <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+      <li>リモート案件を探したい</li>
+      <li>単価アップを狙いたい</li>
+      <li>JavaやWeb系の案件を比較したい</li>
+      <li>今より働きやすい現場を探したい</li>
+    </ul>
+
+    <div className="mt-5">
+      <a
+        href="https://px.a8.net/svt/ejp?a8mat=35JTEP+EU1XHU+3IZO+NTJWY"
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        className="inline-flex rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700"
+      >
+        フリーランス案件を見てみる →
+      </a>
+    </div>
+
+    <p className="mt-3 text-xs leading-relaxed text-slate-500">
+      ※リンク先は外部サービスです。フリーランス向け案件紹介サービスのため、登録・利用条件は公式サイトをご確認ください。
+    </p>
+  </section>
+
         <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
           <label className="mb-2 block font-semibold">案件メモ</label>
           <textarea
